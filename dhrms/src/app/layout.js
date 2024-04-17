@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         <LanguageProvider>
           <div className={theme === "dark" ? "dark-theme" : "light-theme"}>
             <AppBar
-              position='static'
+              position="fixed"
               color='default'
               elevation={0}
               className='shadow-none'>

@@ -11,7 +11,6 @@ const Footer = () => {
         color: 'white',
         py: 3,
         px: 2,
-        position: 'fixed', // Set position to fixed
         bottom: 0, // Position at the bottom
         width: '100%', // Take up full width
       }}
