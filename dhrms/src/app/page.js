@@ -1,4 +1,5 @@
 "use client";
+
 import { Box, Typography } from "@mui/material";
 import Searchbar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
@@ -12,8 +13,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); // Use useState to manage the anchorEl
 
-  console.log("open:", open);
-  console.log("recentSearches:", recentSearches);
+
 
   return (
     <Box
