@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
-import { InputBase, Button, Box, Modal, Typography } from '@mui/material';
+import { InputBase, Button, Box, Modal, Typography, Paper } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import styles from '@/styles/Home.module.css';
+import styles from '@/styles/Home.module.css'; // 确保样式路径正确
+
 const HomePage = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -11,26 +12,26 @@ const HomePage = () => {
       {/* Modal for Menu */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <Box className={styles.modalBox}>
-          {/* Modal content here */}
+          {/* Modal content such as navigation links or menu items */}
         </Box>
       </Modal>
 
-      <Box className="p-4 text-center">
-        <Typography variant="subtitle1" className="mb-4">
+      <Box className={styles.mainContainer}>
+        <Typography variant="h5" gutterBottom className={styles.introText}>
           This is paragraph. Find your perfect place to stay.
         </Typography>
-        <Box display="flex" justifyContent="center" alignItems="center" className="mb-4">
+        <Paper component="form" className={styles.searchBar}>
           <InputBase
-            className="border p-2 rounded-l-lg"
-            placeholder="Enter address or condition"
-            startAdornment={<SearchIcon />}
+            className={styles.input}
+            placeholder="City, Zip, Address"
+            startAdornment={<SearchIcon className={styles.searchIcon} />}
           />
-          <Button variant="contained" color="primary" className="rounded-r-lg">
+          <Button variant="contained" color="primary" className={styles.searchButton}>
             Search
           </Button>
-        </Box>
+        </Paper>
       </Box>
-      </>
+    </>
   );
 };
 
