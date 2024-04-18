@@ -13,6 +13,8 @@ const Footer = () => {
         px: 2,
         bottom: 0, // Position at the bottom
         width: '100%', // Take up full width
+        position: 'relative', 
+        zIndex: 1, // Ensure footer is above other elements
       }}
     >
       <Grid container spacing={2} justifyContent="space-between">
