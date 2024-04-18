@@ -7,8 +7,11 @@ const GoogleMapComponent = ({ results }) => {
         height: '400px'
     };
 
-    const center = {
-        lat: -34.397,
+    const center = results.length > 0 ? {
+        lat: results[0].latitude,
+        lng: results[0].longitude
+    } : {
+        lat: -34.397, 
         lng: 150.644
     };
 
