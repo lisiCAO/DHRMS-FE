@@ -1,9 +1,9 @@
+import Image from "next/image";
 
-import RootLayout from './layout';
-
-export default function Page() {
+export default function Home() {
   return (
-     <p>This is the page content</p>
-
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      Welcome to Home Page
+    </main>
   );
 }
