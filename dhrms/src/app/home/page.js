@@ -1,38 +1,57 @@
-'use client';
-import React, { useState } from 'react';
-import { InputBase, Button, Box, Modal, Typography, Paper } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
-import styles from '@/styles/Home.module.css'; // 确保样式路径正确
+"use client";
+import { Box, Typography } from "@mui/material";
+import Searchbar from "@/components/SearchBar";
+import { useRouter } from "next/navigation"; 
+import RecentSearches from "@/components/RecentSearches"; 
+import { useRecentSearches } from "@/hooks/useRecentSearches";
+import { useState } from "react";
 
-const HomePage = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+const Home = () => {
+  const router = useRouter();
+  const { recentSearches, setRecentSearches } = useRecentSearches();
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleSearchSubmit = (searchTerm) => {
+    router.push({
+      pathname: "/search",
+      query: { search: searchTerm },
+    });
+
+    if (!recentSearches.includes(searchTerm)) {
+      setRecentSearches([searchTerm, ...recentSearches]);
+    }
+  };
+
+  const handleSelectResult = (result) => {
+    router.push({
+      pathname: "/map",
+      query: { location: JSON.stringify(result) }
+    });
+  };
 
   return (
-    <>
-      {/* Modal for Menu */}
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <Box className={styles.modalBox}>
-          {/* Modal content such as navigation links or menu items */}
-        </Box>
-      </Modal>
-
-      <Box className={styles.mainContainer}>
-        <Typography variant="h5" gutterBottom className={styles.introText}>
-          This is paragraph. Find your perfect place to stay.
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
+      <Box maxWidth={"md"}>
+        <Typography textAlign="center" my={2}>
+          MUI <code>{`<SearchBar/>`}</code> Tutorial
         </Typography>
-        <Paper component="form" className={styles.searchBar}>
-          <InputBase
-            className={styles.input}
-            placeholder="City, Zip, Address"
-            startAdornment={<SearchIcon className={styles.searchIcon} />}
-          />
-          <Button variant="contained" color="primary" className={styles.searchButton}>
-            Search
-          </Button>
-        </Paper>
+        <Box width="100%">
+          <Searchbar onSubmit={handleSearchSubmit} inputProps={{
+              onFocus: (event) => {
+                setOpen(true);
+                setAnchorEl(event.currentTarget);
+              },
+              onBlur: () => {
+                setOpen(false);
+              }
+            }}
+            onResultSelect={handleSelectResult} />
+          <RecentSearches open={open} anchorEl={anchorEl} onClose={() => setOpen(false)} />
+        </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 
-export default HomePage;
+export default Home;

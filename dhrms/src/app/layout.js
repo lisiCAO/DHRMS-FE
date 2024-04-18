@@ -1,25 +1,29 @@
 "use client";
+import { Inter } from "next/font/google";
+import "./globals.css";
+
 import React, { useState } from "react";
 import Head from "next/head";
 import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import { Menu as MenuIcon, Brightness4, Language } from "@mui/icons-material";
-import Footer from "../components/Footer";
+import Footer from "@/components/Footer";
 
-import { ThemeProvider } from "../contexts/ThemeContext";
-import { LanguageProvider } from "../contexts/LanguageContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
-import "../styles/globals.css";
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const [theme, setTheme] = useState("light");
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <>
+    <html lang="en">
       <Head>
         <title>DHRMS</title>
         <meta name='description' content='TODO' />
       </Head>
+      <body className={inter.className}>
       <ThemeProvider>
         <LanguageProvider>
           <div className={theme === "dark" ? "dark-theme" : "light-theme"}>
@@ -62,6 +66,7 @@ export default function RootLayout({ children }) {
           </div>
         </LanguageProvider>
       </ThemeProvider>
-    </>
+        </body>
+    </html>
   );
 }
