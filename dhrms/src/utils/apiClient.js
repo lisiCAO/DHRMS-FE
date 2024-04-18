@@ -1,14 +1,15 @@
 import axios from 'axios';
 
+const API_GATEWAY_BASE_URL = process.env.NEXT_PUBLIC_API_GATEWAY_BASE_URL; 
+
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, 
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json' 
   }
 });
 
 const getToken = async () => {
-
   const refreshToken = localStorage.getItem('refreshToken');
 
   try {
@@ -45,19 +46,22 @@ apiClient.interceptors.request.use(async config => {
   return Promise.reject(error);
 });
 
-
 apiClient.interceptors.response.use(response => response, async error => {
   if (error.response && error.response.status === 401) {
     try {
       const newToken = await getToken();
       error.config.headers['Authorization'] = `Bearer ${newToken}`;
-      return apiClient.request(error.config);  
+      return apiClient.request(error.config);
     } catch (refreshError) {
-      console.error('Unable to refresh token:', refreshError);
-      return Promise.reject(refreshError);
+        console.error('Unable to refresh token:', refreshError);
+        // Redirect to login or show an error message
+        // You might need to add logout logic here or redirect to login page
+        window.location.href = '/login'; // Assuming you have a login route
+        return Promise.reject(refreshError);
+      }
     }
-  }
-  return Promise.reject(error);
-});
-
-export default apiClient;
+    // For other errors, just pass them along
+    return Promise.reject(error);
+  });
+  
+  export default apiClient;
