@@ -3,7 +3,6 @@ import {  Paper, Divider, IconButton, InputBase, Popper, MenuList, MenuItem, Lis
 import { useState, useEffect, useRef  } from "react";
 import PropertyIcon from "./PropertyIcon";
 import Image from 'next/image';
-import axios from 'axios'; 
 
 const Searchbar = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,18 +12,21 @@ const Searchbar = (props) => {
 
   useEffect(() => {
     if (searchTerm) {
-      axios.get(`/api/search?query=${encodeURIComponent(searchTerm)}`)
-        .then(response => {
-          setResults(response.data); 
+      fetchSearchResults(searchTerm)
+        .then(data => {
+          setResults(data);
           setOpen(true);
         })
-        .catch(error => console.error('Search error:', error));
+        .catch(error => {
+          console.error('Search error:', error);
+          setResults([]);
+          setOpen(false);
+        });
     } else {
       setResults([]);
       setOpen(false);
     }
   }, [searchTerm]);
-
 
   return (
     <Paper
@@ -38,11 +40,9 @@ const Searchbar = (props) => {
       }}
       ref={anchorRef}
       >
-           {/* Add the IconButton component here */}
       <IconButton type='button' aria-label='search'>
         <PropertyIcon />
       </IconButton>
-      {/* Add a divider between the IconButton and the InputBase */}
       <Divider sx={{ height: 28, mx: 0.5 }} orientation='vertical' />
       <InputBase
         sx={{ ml: 1, flex: 1, minWidth: 600 }}
