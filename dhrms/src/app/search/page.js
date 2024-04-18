@@ -17,10 +17,9 @@ const SearchPage = () => {
             setProgress(10); 
  
             const interval = setInterval(() => {
-                setProgress(prevProgress => prevProgress + 20);
+                setProgress(prevProgress => prevProgress < 100 ? prevProgress + 20 : 100);
             }, 1000);
 
-   
             axios.get(`/api/search?query=${encodeURIComponent(searchTerm)}`)
                 .then(response => {
                     setResults(response.data);
