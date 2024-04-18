@@ -17,8 +17,8 @@ export default function RootLayout({ children }) {
   return (
     <>
       <Head>
-        <title>您的网站标题</title>
-        <meta name='description' content='您的网站描述' />
+        <title>DHRMS</title>
+        <meta name='description' content='TODO' />
       </Head>
       <ThemeProvider>
         <LanguageProvider>

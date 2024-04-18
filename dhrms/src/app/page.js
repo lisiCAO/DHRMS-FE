@@ -1,55 +1,52 @@
 "use client";
-
 import { Box, Typography } from "@mui/material";
 import Searchbar from "../components/SearchBar";
-import { useRouter } from "next/navigation";
-import RecentSearches from "../components/RecentSearches"; // Adjust the import path
-import { useRecentSearches } from "../hooks/useRecentSearches"; // Adjust the import path
-import { useState } from "react"; // Adjust the import to use useState
+import { useRouter } from "next/navigation"; 
+import RecentSearches from "../components/RecentSearches"; 
+import { useRecentSearches } from "../hooks/useRecentSearches";
+import { useState } from "react";
 
 const Home = () => {
   const router = useRouter();
   const { recentSearches, setRecentSearches } = useRecentSearches();
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null); // Use useState to manage the anchorEl
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleSearchSubmit = (searchTerm) => {
+    router.push({
+      pathname: "/search",
+      query: { search: searchTerm },
+    });
 
+    if (!recentSearches.includes(searchTerm)) {
+      setRecentSearches([searchTerm, ...recentSearches]);
+    }
+  };
+
+  const handleSelectResult = (result) => {
+    router.push({
+      pathname: "/map",
+      query: { location: JSON.stringify(result) }
+    });
+  };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh" // Ensure the container takes up the full height of the viewport
-    >
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
       <Box maxWidth={"md"}>
         <Typography textAlign="center" my={2}>
           MUI <code>{`<SearchBar/>`}</code> Tutorial
         </Typography>
         <Box width="100%">
-          <Searchbar
-            onSubmit={(searchTerm) => {
-              router.push({
-                pathname: "/search",
-                query: {
-                  search: searchTerm,
-                },
-              });
-              // Add the search term to the recent searches list
-              if (!recentSearches.includes(searchTerm)) {
-                setRecentSearches([searchTerm, ...recentSearches]);
-              }
-            }}
-            inputProps={{
+          <Searchbar onSubmit={handleSearchSubmit} inputProps={{
               onFocus: (event) => {
                 setOpen(true);
-                setAnchorEl(event.currentTarget); // Set the anchorEl using useState
+                setAnchorEl(event.currentTarget);
               },
-              onBlur: () => setOpen(false),
+              onBlur: () => {
+                setOpen(false);
+              }
             }}
-          />
-          {/* Pass the anchorEl as a prop */}
+            onResultSelect={handleSelectResult} />
           <RecentSearches open={open} anchorEl={anchorEl} onClose={() => setOpen(false)} />
         </Box>
       </Box>
