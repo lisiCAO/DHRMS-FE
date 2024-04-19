@@ -1,15 +1,22 @@
 "use client"; // This file is a client-side script
 import { useState, useEffect } from "react";
-import { Button, Modal, Container, Box, Typography } from "@mui/material";
+import {Paper, Button, Container, Box, Typography } from "@mui/material";
 import LoginForm from "@/components/LoginForm";
 import Registration from "@/components/Registration";
 import ForgotPassword from "@/components/ForgotPassword";
 import { styled } from "@mui/system";
 import { useRouter } from "next/navigation";
+import dynamic from 'next/dynamic';
 
 const FormContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(3),
 }));
+
+// Dynamically import Modal to ensure it's not server-side rendered
+const Modal = dynamic(() => import('@mui/material').then((mod) => mod.Modal), {
+  ssr: false,
+});
+
 
 const AuthPage = () => {
   const router = useRouter();
@@ -73,19 +80,19 @@ const AuthPage = () => {
 
   return (
     <Container>
-      <Modal open={true}>
-        <Modal.Header>
-          <Modal.Title>QLSM</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <Paper elevation={3}>
+        <Box p={2}>
+          <Typography variant="h5" align="center">
+            QLSM
+          </Typography>
           {renderAuthComponent()}
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="text-center w-100">
-            <p>Copyright © QLMS, Inc. 2024</p>
-          </div>
-        </Modal.Footer>
-      </Modal>
+          <Box mt={2} textAlign="center">
+            <Typography variant="body2">
+              Copyright © QLMS, Inc. 2024
+            </Typography>
+          </Box>
+        </Box>
+      </Paper>
     </Container>
   );
 };
