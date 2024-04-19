@@ -43,7 +43,7 @@ const AuthPage = () => {
               Welcome Back!
             </Typography>
             <Typography variant="body1" align="center" gutterBottom>
-              To continue, log in to QLMS
+              To continue, log in to DHRMS
             </Typography>
             <Button
               variant="contained"
@@ -83,12 +83,12 @@ const AuthPage = () => {
       <Paper elevation={3}>
         <Box p={2}>
           <Typography variant="h5" align="center">
-            QLSM
+            DHRMS
           </Typography>
           {renderAuthComponent()}
           <Box mt={2} textAlign="center">
             <Typography variant="body2">
-              Copyright © QLMS, Inc. 2024
+              Copyright © DHRMS, Inc. 2024
             </Typography>
           </Box>
         </Box>
