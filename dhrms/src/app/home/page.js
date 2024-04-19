@@ -31,12 +31,12 @@ const Home = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box maxWidth={"md"}>
         <Typography textAlign="center" my={2}>
           MUI <code>{`<SearchBar/>`}</code> Tutorial
         </Typography>
-        <Box width="100%">
+        <Box width="100%" >
           <Searchbar onSubmit={handleSearchSubmit} inputProps={{
               onFocus: (event) => {
                 setOpen(true);
