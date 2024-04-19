@@ -36,7 +36,7 @@ const Home = () => {
         <Typography textAlign="center" my={2}>
           MUI <code>{`<SearchBar/>`}</code> Tutorial
         </Typography>
-        <Box width="100%" >
+        <Box width="100%" px={2}> 
           <Searchbar onSubmit={handleSearchSubmit} inputProps={{
               onFocus: (event) => {
                 setOpen(true);
