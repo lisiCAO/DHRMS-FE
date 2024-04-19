@@ -55,7 +55,7 @@ const AdminRegistration = () => {
       const data = await response.json();
       setSuccess("Account created successfully: " + data.username);
       setMessage(null);
-      router.push("/login"); // Redirect to login page
+      
     } catch (error) {
       setMessage(error.message || "Failed to register.");
       setSuccess(null);
