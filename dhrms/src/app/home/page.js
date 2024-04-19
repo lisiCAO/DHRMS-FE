@@ -1,53 +1,42 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import Searchbar from "@/components/SearchBar";
-import { useRouter } from "next/navigation"; 
-import RecentSearches from "@/components/RecentSearches"; 
-import { useRecentSearches } from "@/hooks/useRecentSearches";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { fetchSearchResults } from "@/services/searchService"; 
 
 const Home = () => {
   const router = useRouter();
-  const { recentSearches, setRecentSearches } = useRecentSearches();
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleSearchSubmit = (searchTerm) => {
-    router.push({
-      pathname: "/search",
-      query: { search: searchTerm },
-    });
-
-    if (!recentSearches.includes(searchTerm)) {
-      setRecentSearches([searchTerm, ...recentSearches]);
+  // Handles submitting the search term to fetch results and navigate to the map page with these results
+  const handleSearchSubmit = async (searchTerm) => {
+    try {
+      const results = await fetchSearchResults(searchTerm); // Fetch search results from the backend
+      router.push({
+        pathname: "/map",
+        query: { properties: JSON.stringify(results) } // Pass results to the map page as a query parameter
+      });
+    } catch (error) {
+      console.error("Failed to fetch search results:", error);
     }
   };
 
+  // Handles selecting a specific search result to navigate to the map page with that particular result
   const handleSelectResult = (result) => {
     router.push({
       pathname: "/map",
-      query: { location: JSON.stringify(result) }
+      query: { properties: JSON.stringify([result]) } // Pass the selected result to the map page
     });
   };
 
+  // Render the Home component with a search bar and appropriate layout
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box maxWidth={"md"}>
         <Typography textAlign="center" my={2}>
           MUI <code>{`<SearchBar/>`}</code> Tutorial
         </Typography>
-        <Box width="100%">
-          <Searchbar onSubmit={handleSearchSubmit} inputProps={{
-              onFocus: (event) => {
-                setOpen(true);
-                setAnchorEl(event.currentTarget);
-              },
-              onBlur: () => {
-                setOpen(false);
-              }
-            }}
-            onResultSelect={handleSelectResult} />
-          <RecentSearches open={open} anchorEl={anchorEl} onClose={() => setOpen(false)} />
+        <Box width="100%" px={2}>
+          <Searchbar onSubmit={handleSearchSubmit} onResultSelect={handleSelectResult} />
         </Box>
       </Box>
     </Box>
@@ -55,3 +44,4 @@ const Home = () => {
 };
 
 export default Home;
+
