@@ -5,20 +5,23 @@ import { Paper, Box, Button, TextField, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
-import Link from "next/link";
-
+import { useRouter as useWebRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const PropertyCreate = () => {
   // Assuming the image path is stored in a variable named 'backgroundImage'
-  const backgroundImage = "/background.jpg";  // Adjust the path
-  const [address, setAddress] = useState(""); // State for address input
-  const [openSnackbar, setOpenSnackbar] = useState(false); // State for success message
+  const backgroundImage = "/background.jpg"; // Adjust the path
+
+  const [address, setAddress] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  
+  const router = typeof window === "undefined" ? useRouter() : useWebRouter();
 
   const handleRegisterProperty = async () => {
     if (!address) {
       return; // Handle empty address case (optional: display error message)
     }
-  
+
     const response = await fetch("/api/properties", {
       method: "POST",
       headers: {
@@ -26,24 +29,26 @@ const PropertyCreate = () => {
       },
       body: JSON.stringify({ address }),
     });
-  
+
     if (!response.ok) {
       // Handle API call errors (optional: display error message)
       console.error("Error registering property:", response.statusText);
       return;
     }
-  
+
+    const data = await response.json();
+    const propertyId = data.id; // Assuming the response contains the created property ID
+
     setOpenSnackbar(true); // Open success message pop-up
     setAddress(""); // Clear address input after successful registration
 
-    return <Link href="/stepform">Go to Step Form</Link>;
+    // Redirect to StepForm page with the property ID as a query parameter
+    router.push(`/stepform?propertyId=${propertyId}`);
   };
-
 
   return (
     <BackgroundPage backgroundImage={backgroundImage}>
-     
-     <Box
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -54,7 +59,9 @@ const PropertyCreate = () => {
         }}
       >
         <h1 className="text-3xl font-bold mb-4">Register Your Property</h1>
-        <p className="text-gray-600 mb-4">Please type your address to register your property.</p>
+        <p className="text-gray-600 mb-4">
+          Please type your address to register your property.
+        </p>
         <Paper
           component="form"
           elevation={3}
@@ -90,6 +97,6 @@ const PropertyCreate = () => {
       </Snackbar>
     </BackgroundPage>
   );
-}
+};
 
-export default PropertyCreate; 
+export default PropertyCreate;
