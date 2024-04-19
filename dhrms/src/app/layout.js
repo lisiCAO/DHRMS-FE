@@ -63,11 +63,12 @@ export default function RootLayout({ children }) {
                 </Toolbar>
               </AppBar>
 
-                <Suspense fallback={<Loading />}>
-                <Container component="main" sx={{ flexGrow: 1, mt: 8, mb: 2 }}>
+                <Container component="main" sx={{ flexGrow: 1, mt: 8, mb: 2, pt: 5 }}>
+                  <Suspense fallback={<Loading />}>
                   {children}
+                  </Suspense>
                 </Container>
-                </Suspense>
+
               <Footer />
               </Box>
             </div>
