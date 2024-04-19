@@ -8,8 +8,8 @@ import ErrorComponent from '@/components/ErrorComponent';
 
 const SearchPage = () => {
     const searchParams = useSearchParams()
-    const [results, setResults] = useState([]);
     const [error, setError] = useState('');
+    const [properties, setProperties] = useState([]);
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -17,42 +17,35 @@ const SearchPage = () => {
     });
 
     useEffect(() => {
-        const searchTerm = searchParams.get('search');
-        if (!searchTerm) return;
-    
-        let isMounted = true;
-    
-        // Calling the geocoding API
-        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(searchTerm)}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`)
-            .then(response => {
-                if (isMounted && response.data.results.length > 0) {
-                    const location = response.data.results[0].geometry.location;
-                    setResults([{ id: 'result', latitude: location.lat, longitude: location.lng }]);
-                    setError('');
-                } else if (isMounted) {
-                    setError('No results found for this location.');
-                }
-            })
-            .catch(error => {
-                console.error('Geocoding error:', error);
-                if (isMounted) {
-                    setError('Failed to fetch location. Please try again.');
-                }
-            });
-    
-        return () => {
-            isMounted = false;
-        };
-    }, [searchParams]);  
+        const propertiesData = JSON.parse(searchParams.get('properties') || '[]');
+        setProperties(propertiesData);
+        propertiesData.forEach(property => {
+            fetchGeoLocation(property.propertyAddress);
+        });
+    }, [searchParams]);
+
+     const fetchGeoLocation = async (address) => {
+        try {
+            const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+            if (response.data.results.length > 0) {
+                const location = response.data.results[0].geometry.location;
+                setProperties(prevProps => prevProps.map(prop => 
+                    prop.propertyAddress === address ? { ...prop, location } : prop
+                ));
+            }
+        } catch (error) {
+            console.error('Geocoding error:', error);
+        }
+    };
 
     if (loadError) return <ErrorComponent message="Error loading map" />;
     if (!isLoaded) return <div>Loading map...</div>;
     if (error) return <ErrorComponent message={error} />;
 
     return (
-        <div className=''>
-            <GoogleMapComponent results={results} />
-        </div>
+        <GoogleMapComponent
+            properties={properties}
+        />
     );
 };
 

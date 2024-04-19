@@ -3,7 +3,7 @@ import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 
 const MapCard = ({ image, data }) => {
   return (
-    <Card sx={{ maxWidth: 345, maxHeight: 400 }}>
+    <Card sx={{ maxWidth: 345, maxHeight: 400, width: '100%', boxSizing: 'border-box' }}>
       <CardMedia
         component="img"
         height="140"

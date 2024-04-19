@@ -4,7 +4,7 @@ import { InfoWindow } from "@react-google-maps/api";
 import { useState } from "react";
 import MapCard from "./MapCard";
 
-const GoogleMapComponent = ({ results }) => {
+const GoogleMapComponent = ({ properties }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   const containerStyle = {
@@ -25,25 +25,25 @@ const GoogleMapComponent = ({ results }) => {
 
   return (
     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-      {results.map((result) => (
+      {results.map((property) => (
         <Marker
-          key={result.id}
-          position={{ lat: result.latitude, lng: result.longitude }}
-          onClick={() => setSelectedPlace(result)}
+          key={property.id}
+          position={{ lat: property.latitude, lng: property.longitude }}
+          onClick={() => setSelectedPlace(property)}
         />
       ))}
-      {selectedPlace && (
+      {selectedProperty && (
         <InfoWindow
           position={{
-            lat: selectedPlace.latitude,
-            lng: selectedPlace.longitude,
+            lat: selectedProperty.latitude,
+            lng: selectedProperty.longitude,
           }}
           onCloseClick={() => setSelectedPlace(null)}
         >
           <MapCard
-            image={selectedPlace.image}
+            image={selectedProperty.imageUrl}
             data={{
-              Address: selectedPlace.address,
+              Address: selectedProperty.address,
               ...selectedPlace.additionalData,
             }}
           />

@@ -26,7 +26,7 @@ const Home = () => {
   const handleSelectResult = (result) => {
     router.push({
       pathname: "/map",
-      query: { location: JSON.stringify(result) }
+      query: { location: JSON.stringify([result]) }
     });
   };
 
@@ -47,7 +47,7 @@ const Home = () => {
               }
             }}
             onResultSelect={handleSelectResult} />
-          <RecentSearches open={open} anchorEl={anchorEl} onClose={() => setOpen(false)} />
+          {/* <RecentSearches open={open} anchorEl={anchorEl} onClose={() => setOpen(false)} /> */}
         </Box>
       </Box>
     </Box>
