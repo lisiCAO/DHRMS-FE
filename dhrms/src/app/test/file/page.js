@@ -10,7 +10,7 @@ const FilesComponent = () => {
   useEffect(() => {
     const loadFiles = async () => {
       try {
-        const data = await getFilesByEntityWithoutAuth(1); // 示例中使用固定的entityId，实际使用时可能需要动态传入
+        const data = await getFilesByEntityWithoutAuth(1); 
         setFiles(data);
         setIsLoading(false);
       } catch (err) {

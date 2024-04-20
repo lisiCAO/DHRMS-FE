@@ -1,60 +1,68 @@
-"use client"; // This file is a client-side script
-import React, { useState } from "react";
-import BackgroundPage from "@/components/BackgroundPage";
+"use client"; 
+import React, { useState, useEffect } from "react";
+// import BackgroundPage from "@/components/BackgroundPage";
 import { Paper, Box, Button, TextField, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
-import { useRouter as useWebRouter } from "next/router";
 import { useRouter } from "next/navigation";
 
 const PropertyCreate = () => {
-  // Assuming the image path is stored in a variable named 'backgroundImage'
-  const backgroundImage = "/background.jpg"; // Adjust the path
-
+  // const backgroundImage = "/background.jpg"; 
   const [address, setAddress] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  
-  const router = typeof window === "undefined" ? useRouter() : useWebRouter();
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [severity, setSeverity] = useState("success");
+
+  const router = useRouter();
 
   const handleRegisterProperty = async () => {
     if (!address) {
-      return; // Handle empty address case (optional: display error message)
-    }
-
-    const response = await fetch("/api/properties", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ address }),
-    });
-
-    if (!response.ok) {
-      // Handle API call errors (optional: display error message)
-      console.error("Error registering property:", response.statusText);
+      setSnackbarMessage("Please enter an address.");
+      setSeverity("error");
+      setOpenSnackbar(true);
       return;
     }
 
-    const data = await response.json();
-    const propertyId = data.id; // Assuming the response contains the created property ID
+    try {
+      const response = await fetch("/api/properties", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address }),
+      });
 
-    setOpenSnackbar(true); // Open success message pop-up
-    setAddress(""); // Clear address input after successful registration
+      if (!response.ok) {
+        throw new Error("Failed to register property.");
+      }
 
-    // Redirect to StepForm page with the property ID as a query parameter
-    router.push(`/stepform?propertyId=${propertyId}`);
+      const data = await response.json();
+      const propertyId = data.id;
+
+      setOpenSnackbar(true);
+      setSnackbarMessage("Property registered successfully!");
+      setSeverity("success");
+      setAddress(""); 
+      router.push(`/stepform?propertyId=${propertyId}`);
+    } catch (error) {
+      console.error("Error registering property:", error);
+      setSnackbarMessage(error.message || "Error occurred.");
+      setSeverity("error");
+      setOpenSnackbar(true);
+    }
   };
 
   return (
-    <BackgroundPage backgroundImage={backgroundImage}>
+    // <BackgroundPage backgroundImage={backgroundImage}>
+    <>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh",
+          height: "60vh",
           width: "100vw",
         }}
       >
@@ -91,11 +99,12 @@ const PropertyCreate = () => {
         autoHideDuration={6000} // Message duration in milliseconds
         onClose={() => setOpenSnackbar(false)}
       >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          Property registered successfully!
+        <Alert severity={severity} sx={{ width: "100%" }}>
+          {snackbarMessage}
         </Alert>
       </Snackbar>
-    </BackgroundPage>
+      </>
+    // </BackgroundPage>
   );
 };
 
