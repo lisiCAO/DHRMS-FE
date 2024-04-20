@@ -1,34 +1,64 @@
-// "use client";
-// import React,{ createContext } from 'react';
-// import GoogleMapComponent from '@/components/GoogleMapComponent'; 
-// import { useLoadScript } from '@react-google-maps/api';
+"use client";
 
-// const MapPage = () => {
-//     const results = [
-//         { id: 1, latitude: 37.7749, longitude: -122.4194 }, // San Francisco
-//         { id: 2, latitude: 34.0522, longitude: -118.2437 }, // Los Angeles
-//         { id: 3, latitude: 40.7128, longitude: -74.0060 }   // New York
-//     ];
+import React, { useEffect, useState } from 'react';
+import { fetchProperties } from '@/services/propertyService'; // 确保路径正确
 
-//     const { isLoaded, loadError } = useLoadScript({
-//         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-//         version: "weekly"
-//     });
+const PropertiesComponent = () => {
+  const [properties, setProperties] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-//     if (loadError) {
-//         return <div>Error loading maps</div>;
-//     }
+  useEffect(() => {
+    const loadProperties = async () => {
+      try {
+        const data = await fetchProperties(false);
+        setProperties(data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+        setError('Failed to fetch properties');
+        setIsLoading(false);
+      }
+    };
 
-//     if (!isLoaded) {
-//         return <div>Loading Maps...</div>;
-//     }
+    loadProperties();
+  }, []);
 
-//     return (
-//         <div>
-//             <h1>Map Showing Locations</h1>
-//             <GoogleMapComponent results={results} />
-//         </div>
-//     );
-// };
+  if (isLoading) {
+    return <div>Loading properties...</div>;
+  }
 
-// export default MapPage;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <div>
+      <h1>Properties List</h1>
+      <ul>
+        {properties.map(property => (
+          <li key={property.id}>
+            <h2>{property.address}</h2>
+            <p>Postcode: {property.postcode}</p>
+            <p>Type: {property.propertytype}</p>
+            <p>Description: {property.propertydescription}</p>
+            <p>Status: {property.status}</p>
+            <div>
+              <h3>Amenities:</h3>
+              <ul>
+                <li>Parking: {property.amenities.parking ? 'Yes' : 'No'}</li>
+                <li>Kitchen: {property.amenities.kitchen ? 'Yes' : 'No'}</li>
+                <li>Pool: {property.amenities.pool ? 'Yes' : 'No'}</li>
+                <li>Bedrooms: {property.amenities.bedrooms}</li>
+                <li>Bathrooms: {property.amenities.bathrooms}</li>
+                <li>Living Area: {property.amenities.livingArea} sqm</li>
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default PropertiesComponent;

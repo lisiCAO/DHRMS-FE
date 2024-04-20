@@ -6,7 +6,6 @@ import { useTheme } from '@/contexts/ThemeContext';
 
 const NavBar = () => {
   const {theme, toggleTheme } = useTheme();
-  console.log(theme);
   return (
     <AppBar position="fixed" color='default' elevation={0} className='shadow-none'>
       <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>

@@ -77,7 +77,8 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
       ref={anchorRef} // Ref to anchor the popper for search results
     >
       <IconButton type="button" aria-label="search" sx={{ [`@media (max-width: 600px)`]: { padding: 0.5 } }}>
-        <PropertyIcon /> // Icon to indicate the search functionality visually
+        <PropertyIcon />  
+        {/* Icon to indicate the search functionality visually */}
       </IconButton>
       <InputBase
         sx={{
@@ -95,7 +96,8 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
         onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm state on input change
       />
       <IconButton type="submit" aria-label="search">
-        <SearchOutlined /> // Icon button for submitting the search form
+        <SearchOutlined /> 
+         {/* Icon button for submitting the search form */}
       </IconButton>
       <Popper open={open} anchorEl={anchorRef.current} style={{ zIndex: 1 }}>
         <Paper>

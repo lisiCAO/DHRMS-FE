@@ -5,9 +5,9 @@ const API_GATEWAY_BASE_URL = process.env.NEXT_PUBLIC_API_GATEWAY_BASE_URL;
 
 /* Create an axios instance configured with the base URL and default headers */
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, 
+  baseURL: API_GATEWAY_BASE_URL,  
   headers: {
-    'Content-Type': 'application/json' 
+    'Content-Type': 'application/json'
   }
 });
 
@@ -17,7 +17,7 @@ const getToken = async () => {
 
   try {
     // Request a new token using the refresh token
-    const response = await axios.post(`${API_GATEWAY_BASE_URL}/api/auth/login`, new URLSearchParams({
+    const response = await axios.post(`${API_GATEWAY_BASE_URL}/auth/login`, new URLSearchParams({
         grant_type: 'refresh_token',
         client_id: 'your-client-id',  
         refresh_token: refreshToken,
@@ -40,19 +40,24 @@ const getToken = async () => {
 
 /* Add a request interceptor to include the authorization token in every request */
 apiClient.interceptors.request.use(async config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // 检查是否明确要求不发送令牌
+  if (config.headers.Authorization === '') {
+    delete config.headers.Authorization;  // 移除 Authorization 头
   } else {
-    // Retrieve a new token if no token is available
-    const newToken = await getToken();
-    config.headers.Authorization = `Bearer ${newToken}`;
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      // 仅当需要令牌而本地不存在时，尝试获取新令牌
+      const newToken = await getToken();
+      config.headers.Authorization = `Bearer ${newToken}`;
+    }
   }
   return config;
 }, error => {
-  // Pass along any errors that occur during request configuration
   return Promise.reject(error);
 });
+
 
 /* Add a response interceptor to handle automatic token refresh on 401 errors */
 apiClient.interceptors.response.use(response => response, async error => {
@@ -72,5 +77,5 @@ apiClient.interceptors.response.use(response => response, async error => {
   // For other errors, just pass them along
   return Promise.reject(error);
 });
-  
+
 export default apiClient;
