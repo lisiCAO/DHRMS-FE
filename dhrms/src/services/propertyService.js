@@ -60,7 +60,7 @@ export const postPropertyDetails = async (propertyData, includeToken = true) => 
 
   try {
     // The endpoint '/api/properties' is assumed to be the correct URL for posting property data.
-    const response = await apiClient.post('/api/properties', propertyData, config);
+    const response = await apiClient.post('/properties', propertyData, config);
     if (!response.ok) {
       throw new Error(`HTTP status ${response.status}: ${response.statusText}`);
     }
@@ -88,7 +88,7 @@ export const updatePropertyDetails = async (propertyId, propertyData, includeTok
 
   try {
     // Construct the URL with the property ID
-    const url = `/api/properties/${propertyId}`;
+    const url = `/properties/${propertyId}`;
     
     // Execute the PUT request with the updated property data
     const response = await apiClient.put(url, propertyData, config);

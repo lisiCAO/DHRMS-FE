@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Paper, Box, Button, InputBase, Snackbar, Alert, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
+import { postPropertyDetails } from "@/services/propertyService";
 
 const libraries = ["places"];
 
