@@ -41,22 +41,16 @@ const PropertyCreate = () => {
       setOpenSnackbar(true);
       return;
     }
-
+  
     try {
-      const response = await fetch("/api/properties", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address, ownerUserId: 1}),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to register property.");
-      }
-
-      const data = await response.json();
-      setPropertyId(data.id);
+      const propertyData = {
+        address,
+        ownerUserId: 1  
+      };
+  
+      const data = await postPropertyDetails(propertyData, false);
+  
+      setPropertyId(data.id); 
       setDialogOpen(true);
       setOpenSnackbar(true);
       setSnackbarMessage("Property registered successfully!");
@@ -85,7 +79,7 @@ const PropertyCreate = () => {
           alignItems: "center",
           justifyContent: "center",
           height: "60vh",
-          width: "100vw",
+          width: "100%",
         }}
       >
         <h1 className="text-3xl font-bold mb-4">Register Your Property</h1>
@@ -98,9 +92,11 @@ const PropertyCreate = () => {
           sx={{
             display: "flex",
             alignItems: "center",
+            flexDirection: { xs: 'column', sm: 'row' }, 
             px: 1, 
             py: 0.5,
             width: "40%",
+            minWidth: { xs: 330, sm: 450},
             m: 2, 
             backgroundColor: 'background.paper' 
           }}
@@ -136,7 +132,7 @@ const PropertyCreate = () => {
               />
             </Autocomplete>
           ) : <div>Loading...</div>}
-          <Divider sx={{ height: 28, mx: 0.5 }} orientation="vertical" />
+          <Divider sx={{ height: 28, mx: 0.5}}  orientation={{ xs: "horizontal", sm: "vertical" }} />
           <Button variant="contained" color="primary" onClick={handleRegisterProperty}>
             Register
           </Button>
@@ -169,7 +165,6 @@ const PropertyCreate = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
       </Box>
       <Snackbar
         open={openSnackbar}
