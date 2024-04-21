@@ -19,9 +19,9 @@ const Footer = () => {
     >
       <Grid container spacing={2} justifyContent="space-between">
         <Grid item xs={12} sm={4}>
-          <Typography variant="h6">QLMS Renting</Typography>
+          <Typography variant="h6">DHRMS Renting</Typography>
           <Typography variant="body2">
-            © {new Date().getFullYear()} QLMS Renting. All rights reserved.
+            © {new Date().getFullYear()} DHRMS Renting. All rights reserved.
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4}>
