@@ -19,22 +19,26 @@ export const getFilesByEntity = async (associatedEntityId, associatedEntityType)
 };
 
 /**
- * Uploads a file and associates it with an entity.
+ * Uploads a file and associates it with an entity, with or without authentication.
  * @param {File} fileData - The file to be uploaded.
+ * @param {string} fileType - The type of the file (e.g., 'image').
  * @param {string} associatedEntityId - The ID of the entity to which the file will be associated.
  * @param {string} associatedEntityType - The type of the entity (e.g., 'property', 'house').
+ * @param {number} userId - The ID of the user uploading the file.
+ * @param {boolean} useAuth - Determines whether to include authentication token in the request.
  * @returns {Promise<Object>} - A promise that resolves to the uploaded file's data.
  */
-export const uploadFile = async (fileData, associatedEntityId, associatedEntityType) => {
+export const uploadFile = async (fileData, fileType, associatedEntityId, associatedEntityType, userId, useAuth = true) => {
   const formData = new FormData();
   formData.append('file', fileData);
+  formData.append('fileType', fileType);
   formData.append('associatedEntityId', associatedEntityId);
   formData.append('associatedEntityType', associatedEntityType);
+  formData.append('userId', userId);
 
   try {
-    const response = await apiClient.post('/files', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const headers = useAuth ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'multipart/form-data', 'Authorization': '' };
+    const response = await apiClient.post('/files', formData, { headers });
     return response.data;
   } catch (error) {
     console.error('Failed to upload file:', error);

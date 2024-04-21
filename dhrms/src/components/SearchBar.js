@@ -7,6 +7,7 @@ import PropertyIcon from "./PropertyIcon";
 import Image from "next/image";
 import { debounce } from "lodash";
 import { fetchSearchResults } from "@/services/searchService";
+import { getFilesByEntityWithoutAuth } from "@/services/fileService";
 
 const Searchbar = ({ onSubmit, onResultSelect }) => {
   // State to manage search term, search results, and popper visibility
@@ -14,7 +15,17 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
   const [results, setResults] = useState([]);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+  const [popperWidth, setPopperWidth] = useState();
 
+  const popperStyles = {
+    borderRadius: '4px',
+    boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)', // 可根据搜索栏的阴影进行调整
+    width: popperWidth, 
+    maxWidth: '800px', 
+    mt: '2px', 
+    zIndex: 1,
+  };
+  
   // Debounced search to reduce the number of API calls during user input
   useEffect(() => {
     const performSearch = async () => {
@@ -27,8 +38,17 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
   
       try {
         // Fetching search results based on the searchTerm
-        const data = await fetchSearchResults(searchTerm);
-        setResults(data);
+        const data = await fetchSearchResults(searchTerm, false);
+        const filesPromises = data.map((result) =>
+          getFilesByEntityWithoutAuth(result.propertyId)
+            .then((files) => ({ ...result, files }))
+            .catch((error) => {
+              console.error("Failed to fetch files for property:", result.propertyId, error);
+              return { ...result, files: [] };
+            })
+        );
+        const propertiesWithFiles = await Promise.all(filesPromises);
+        setResults(propertiesWithFiles);
         setOpen(data.length > 0);
       } catch (error) {
         console.error("Search error:", error);
@@ -51,6 +71,24 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
     setSearchTerm("");
   };
 
+  useEffect(() => {
+    if (anchorRef.current) {
+      setPopperWidth(anchorRef.current.clientWidth);
+    }
+  
+    const handleResize = () => {
+      if (anchorRef.current) {
+        setPopperWidth(anchorRef.current.clientWidth);
+      }
+    };
+  
+    window.addEventListener('resize', handleResize);
+  
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Rendering the search bar interface
   return (
     <Paper
@@ -71,7 +109,7 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
       }}
       onSubmit={(e) => {
         e.preventDefault();  // Prevent form submission default behavior
-        onSubmit(searchTerm); // Trigger onSubmit prop with the current search term
+        onSubmit(results); // Trigger onSubmit prop with the current search term
         setOpen(false); // Close the popper on submit
       }}
       ref={anchorRef} // Ref to anchor the popper for search results
@@ -99,15 +137,19 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
         <SearchOutlined /> 
          {/* Icon button for submitting the search form */}
       </IconButton>
-      <Popper open={open} anchorEl={anchorRef.current} style={{ zIndex: 1 }}>
+      <Popper open={open} anchorEl={anchorRef.current} style={popperStyles}>
         <Paper>
           <MenuList>
             {results.map((result, index) => (
               <MenuItem key={index} onClick={() => handleItemClick(result)}>
                 <ListItemIcon>
-                  <Image src={result.image} alt={result.address} width={50} height={50} />
+                  {result.files.length > 0 ? (
+                      <Image src={result.files[0].publicUrl} alt={result.property.address} width={50} height={50} />
+                    ) : (
+                      <div style={{ width: 50, height: 50 }} /> 
+                    )}
                 </ListItemIcon>
-                <ListItemText primary={result.address} />
+                <ListItemText primary={result.property.address} />
               </MenuItem>
             ))}
           </MenuList>
@@ -118,3 +160,4 @@ const Searchbar = ({ onSubmit, onResultSelect }) => {
 };
 
 export default Searchbar;
+

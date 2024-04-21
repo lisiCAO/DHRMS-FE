@@ -5,7 +5,6 @@ import MapCard from "./MapCard";
 
 const GoogleMapComponent = ({ properties }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
-
   const containerStyle = {
     width: "100%",
     height: "50vh",  // Setting the height of the map
@@ -26,30 +25,30 @@ const GoogleMapComponent = ({ properties }) => {
       center={center}  // Set the center of the map
       zoom={10}  // Set the zoom level of the map
     >
-      {properties.map((property) => (
+    {properties.map((property) => (
         <Marker
-          key={property.id}
-          position={{ lat: property.location.lat, lng: property.location.lng }}
-          onClick={() => setSelectedPlace(property)}  // Set selected property when marker is clicked
+            key={property.property.id}
+            position={{ lat: property.property.location.lat, lng: property.property.location.lng }}
+            onClick={() => setSelectedPlace(property)}
         />
-      ))}
-      {selectedPlace && (  // Display an InfoWindow when a place is selected
+    ))}
+    {selectedPlace && (
         <InfoWindow
-          position={{
-            lat: selectedPlace.location.lat,
-            lng: selectedPlace.location.lng,
-          }}
-          onCloseClick={() => setSelectedPlace(null)}  // Clear the selected place on close
-        >
-          <MapCard  // Pass selected place data to the MapCard for display
-            image={selectedPlace.imageUrl}
-            data={{
-              Address: selectedPlace.address,
-              ...selectedPlace.additionalData,
+            position={{
+                lat: selectedPlace.property.location.lat,
+                lng: selectedPlace.property.location.lng,
             }}
-          />
+            onCloseClick={() => setSelectedPlace(null)}
+        >
+            <MapCard
+                image={selectedPlace.files.length > 0 ? selectedPlace.files[0].publicUrl : ''}
+                data={{
+                    Address: selectedPlace.property.address,
+                    ...selectedPlace.property
+                }}
+            />
         </InfoWindow>
-      )}
+    )}
     </GoogleMap>
   );
 };
