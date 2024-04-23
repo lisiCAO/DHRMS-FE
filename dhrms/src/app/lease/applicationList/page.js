@@ -1,9 +1,12 @@
+"use client";
 import { useState, useEffect } from 'react';
 import { Paper, Button, Container, Typography, Tab, Tabs, Box, Avatar } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import PropertiesTable from '@components/PropertiesTable';
-import ApplicationTable from '@components/ApplicationTable';
+import { useRouter } from 'next/navigation';
+import PropertiesTable from '@/components/PropertiesTable';
+import ApplicationCard from '@/components/ApplicationCard';
+
+
 
 const mockProperties = [
     { id: 1, name: 'Property 1', address: '123 Main St', image: '/path/to/image1.jpg', status: 'Available' },
@@ -17,21 +20,23 @@ const mockProperties = [
     // Add more applications as needed...
   ];
 
-const ApplicationList = () => {
-  const [value, setValue] = useState(0);
-  const [applications, setApplications] = useState([]);
-  const [properties, setProperties] = useState([]);
-  const [error, setError] = useState(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    // Fetch properties and applications from the API when the component mounts
-    setTimeout(() => {
-      setProperties(mockProperties);
-      setApplications(mockApplications);
-    }, 1000); // Simulate network delay
-  }, []);
-
+  const ApplicationList = () => {
+    const [applications, setApplications] = useState([]);
+    const [properties, setProperties] = useState([]);
+    const [selectedApplication, setSelectedApplication] = useState(null);
+  
+    useEffect(() => {
+      // Fetch properties and applications from the API when the component mounts
+      setTimeout(() => {
+        setProperties(mockProperties);
+        setApplications(mockApplications);
+      }, 1000); // Simulate network delay
+    }, []);
+  
+    const handleViewDetail = (propertyId) => {
+        const application = applications.find(app => app.propertyId === propertyId);
+        setSelectedApplication(application);
+      };
 //   useEffect(() => {
 //     // Fetch properties and applications from the API when the component mounts
 //     axios.get('/api/properties').then((response) => {
@@ -66,24 +71,17 @@ const ApplicationList = () => {
     });
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
 
-    return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Applications Pending" />
-          <Tab label="Applications Approved" />
-          <Tab label="Applications Denied" />
-        </Tabs>
+  return (
+    <Paper elevation={3} style={{ padding: '10px', margin: '10px' }}>
+      <Box sx={{ width: '100%' }}>
+      <PropertiesTable properties={properties} selectedApplication={selectedApplication} onViewDetail={handleViewDetail} />
+        {selectedApplication ? <ApplicationCard application={selectedApplication} /> : null}
       </Box>
-      <PropertiesTable properties={properties} />
-      <ApplicationTable value={value} index={0} title="Applications Pending" applications={applications} properties={properties} onApprove={handleApprove} onDeny={handleDeny} />
-      <ApplicationTable value={value} index={1} title="Applications Approved" applications={applications} properties={properties} onApprove={handleApprove} onDeny={handleDeny} />
-      <ApplicationTable value={value} index={2} title="Applications Denied" applications={applications} properties={properties} onApprove={handleApprove} onDeny={handleDeny} />
-    </Box>
+    </Paper>
   );
 };
 

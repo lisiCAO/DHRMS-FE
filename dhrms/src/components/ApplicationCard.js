@@ -1,6 +1,6 @@
 import { Paper, Typography, Avatar, Button } from '@mui/material';
 
-const ApplicationCard = ({ application, property, onApprove, onDeny }) => {
+const ApplicationCard = ({ application }) => {
     return (
         <Paper elevation={3} style={{ margin: '10px 0', padding: '10px' }}>
           <Typography variant="h6">Rental Application</Typography>
