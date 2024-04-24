@@ -1,12 +1,12 @@
 "use client";
-import "./page.css";
+
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Container, Grid, Typography, Paper } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const LeaseDetails = () => {
   const [lease, setLease] = useState(null);
