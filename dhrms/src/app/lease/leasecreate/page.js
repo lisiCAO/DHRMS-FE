@@ -1,6 +1,10 @@
+"use client";
+import "./page.css";
 import React from 'react';
-import { Button, TextField, Container, Grid, Typography } from '@mui/material';
-import { DatePicker } from '@mui/lab';
+import { Button, TextField, Container, Grid, Typography, Paper } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useFormik } from 'formik';
 import axios from 'axios';
 
@@ -26,9 +30,15 @@ const LeaseCreate = () => {
     },
   });
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Paper elevation={3} style={{ padding: '10px', margin: '10px' }}>
     <Container>
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom align='center'>
         Rental Agreement
       </Typography>
       <form onSubmit={formik.handleSubmit}>
@@ -41,6 +51,7 @@ const LeaseCreate = () => {
               1. **TERM:** This lease shall commence on 
             </Typography>
             <DatePicker
+              required
               label="Start Date"
               value={formik.values.startDate}
               onChange={(value) => formik.setFieldValue('startDate', value)}
@@ -50,6 +61,7 @@ const LeaseCreate = () => {
               and continue (unless sooner terminated) until 
             </Typography>
             <DatePicker
+              required
               label="End Date"
               value={formik.values.endDate}
               onChange={(value) => formik.setFieldValue('endDate', value)}
@@ -59,6 +71,7 @@ const LeaseCreate = () => {
               2. **RENT:** Renter agrees to pay Owner the rent of 
             </Typography>
             <TextField
+              required
               label="Monthly Rent"
               value={formik.values.monthlyRent}
               onChange={formik.handleChange}
@@ -72,6 +85,7 @@ const LeaseCreate = () => {
               3. **SECURITY DEPOSIT:** Upon the due execution of this Agreement, Renter will deposit with Owner the sum of 
             </Typography>
             <TextField
+              required
               label="Deposit"
               value={formik.values.deposit}
               onChange={formik.handleChange}
@@ -85,6 +99,7 @@ const LeaseCreate = () => {
               4. **TERMS:** The terms of this agreement will last for 
             </Typography>
             <TextField
+              required
               label="Terms"
               value={formik.values.terms}
               onChange={formik.handleChange}
@@ -104,16 +119,19 @@ const LeaseCreate = () => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" color="primary" type="submit">
+            <Button className="no-print" variant="contained" color="primary" type="submit">
               Send
             </Button>
-            <Button variant="contained" color="secondary" type="reset">
+            <Button className="no-print" variant="contained" color="secondary" type="reset">
               Cancel
             </Button>
+            <Button onClick={handlePrint} fullWidth margin="normal">Print</Button>
           </Grid>
         </Grid>
       </form>
     </Container>
+    </Paper>
+    </LocalizationProvider>
   );
 };
 
