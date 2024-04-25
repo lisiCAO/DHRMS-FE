@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Drawer, Button } from '@mui/material';
 import ApplicationCard from '@/components/ApplicationCard';
+import Image from 'next/image';
 
 const PropertiesTable = ({ properties, selectedApplication }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -19,7 +20,7 @@ const PropertiesTable = ({ properties, selectedApplication }) => {
           { field: 'id', hide: true },
           { field: 'name', headerName: 'Property Name', width: 200 },
           { field: 'address', headerName: 'Address', width: 200 },
-          { field: 'image', headerName: 'Image', width: 130, renderCell: (params) => (<img src={params.value} alt="Property" width="50" />) },
+          { field: 'image', headerName: 'Image', width: 130, renderCell: (params) => (<Image src={params.value} alt="Property" width="50" />) },
           { field: 'status', headerName: 'Status', width: 130 },
           {
             field: 'viewDetail',

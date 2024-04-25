@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { updatePropertyDetails } from '@/services/propertyService'; 
 import { uploadFile } from '@/services/fileService';
 import { Container, Checkbox, FormControl, FormControlLabel, Typography, Button, TextField, Snackbar, Alert, InputLabel, Select, MenuItem, LinearProgress, Box, FormGroup, FormHelperText } from '@mui/material';
+import Image from 'next/image';
 
 const StepForm = ({ propertyId }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -142,7 +143,7 @@ const StepForm = ({ propertyId }) => {
             <Box className="flex flex-wrap mt-2 gap-4 justify-center">
               {imageFiles.map((file, index) => (
                 <Box key={index} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2">
-                  <img src={file.preview} alt={`Preview ${index}`} className="max-w-full h-auto rounded-lg border border-gray-200 shadow-sm" />
+                  <Image src={file.preview} alt={`Preview ${index}`} className="max-w-full h-auto rounded-lg border border-gray-200 shadow-sm" />
                 </Box>
               ))}
             </Box>

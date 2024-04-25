@@ -6,12 +6,13 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const LeaseDetails = () => {
   const [lease, setLease] = useState(null);
+  const params = useParams();
   const router = useRouter();
-  const { leaseId } = router.query;
+  const leaseId = params.leaseId;
 
   useEffect(() => {
     // Fetch the lease details from the API when the component mounts

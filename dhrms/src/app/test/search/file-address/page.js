@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { fetchSearchResults } from '@/services/searchService';
 import { getFilesByEntityWithoutAuth } from '@/services/fileService';
+import Image from 'next/image';
 
 const SearchComponent = () => {
   const [query, setQuery] = useState('');
@@ -48,7 +49,7 @@ const SearchComponent = () => {
           <li key={result.propertyId}>
             <h2>{result.property.address}</h2>
             {result.files.map(file => (
-              <img key={file.id} src={file.publicUrl} alt={file.fileName} style={{ width: '100px', height: 'auto' }} />
+              <Image key={file.id} src={file.publicUrl} alt={file.fileName} style={{ width: '100px', height: 'auto' }} />
             ))}
             <p>ID: {result.propertyId}</p>
             <p>Postcode: {result.property.postcode}</p>

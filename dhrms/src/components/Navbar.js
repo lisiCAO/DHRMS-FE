@@ -1,11 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import { Menu as MenuIcon, Brightness4 as Brightness4Icon, Language as LanguageIcon } from "@mui/icons-material";
-import { useTheme } from '@/contexts/ThemeContext';
 import Menu from './Menu';
 
 const NavBar = () => {
-  const { theme, toggleTheme } = useTheme();
   const [checked, setChecked] = React.useState(false);
 
   const handleChange = () => {
@@ -22,7 +20,7 @@ const NavBar = () => {
           DHRMS
         </Typography>
         <div>
-          <IconButton color='inherit' onClick={toggleTheme}>
+          <IconButton color='inherit' >
             <Brightness4Icon />
           </IconButton>
           <IconButton color='inherit'>

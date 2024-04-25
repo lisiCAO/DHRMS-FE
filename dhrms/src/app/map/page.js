@@ -1,13 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import GoogleMapComponent from '@/components/GoogleMapComponent'; 
 import { useLoadScript } from '@react-google-maps/api';
 import ErrorComponent from '@/components/ErrorComponent';
 
 const SearchPage = () => {
-    const [searchParams] = useSearchParams();  // Hook to get the search parameters
+
     const [error, setError] = useState('');
     const [properties, setProperties] = useState([]);
 

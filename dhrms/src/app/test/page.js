@@ -1,59 +1,44 @@
 "use client";
+// 引入 Next.js 的必要组件和钩子
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-import React, { useEffect, useState } from 'react';
-import { fetchProperties } from '@/services/propertyService'; // 确保路径正确
+const MenuPage = () => {
+  // 使用 useNavigation 钩子获取 navigation 对象
+  const navigation = useRouter();
+  const testRoute = '/test/';
 
-const PropertiesComponent = () => {
-  const [properties, setProperties] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // 定义一个数组来存储你的测试页面路由
+  const testPages = [
+    { name: 'Property ', path: `${testRoute}property` },
+    { name: 'Create property', path: `${testRoute}property/create`},
+    { name: 'Create property', path: `${testRoute}property/update`},
+    { name: 'File', path: `${testRoute}file`},
+    { name: 'Search', path: `${testRoute}search`},
+    { name: 'Search with File', path: `${testRoute}search/file-address`},
 
-  useEffect(() => {
-    const loadProperties = async () => {
-      try {
-        const data = await fetchProperties(false);
-        setProperties(data);
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch properties:', err);
-        setError('Failed to fetch properties');
-        setIsLoading(false);
-      }
-    };
+    // 可以继续添加更多的测试页面
+  ];
 
-    loadProperties();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading properties...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // 程序化导航到指定页面的函数
+  const navigateToPage = (path) => {
+    navigation.push(path); // 使用 push 方法进行页面跳转
+  };
 
   return (
     <div>
-      <h1>Properties List</h1>
+      <h1>Test Pages Menu</h1>
       <ul>
-        {properties.map(property => (
-          <li key={property.id}>
-            <h2>{property.address}</h2>
-            <p>Postcode: {property.postcode}</p>
-            <p>Type: {property.propertytype}</p>
-            <p>Description: {property.propertydescription}</p>
-            <p>Status: {property.status}</p>
-            <div>
-              <h3>Amenities:</h3>
-              <ul>
-                <li>Parking: {property.amenities.parking ? 'Yes' : 'No'}</li>
-                <li>Kitchen: {property.amenities.kitchen ? 'Yes' : 'No'}</li>
-                <li>Pool: {property.amenities.pool ? 'Yes' : 'No'}</li>
-                <li>Bedrooms: {property.amenities.bedrooms}</li>
-                <li>Bathrooms: {property.amenities.bathrooms}</li>
-                <li>Living Area: {property.amenities.livingArea} sqm</li>
-              </ul>
-            </div>
+        {testPages.map(page => (
+          <li key={page.path}>
+            {/* 使用 Link 组件为每个页面创建一个链接 */}
+            <Link href={page.path}>
+              {page.name}
+            </Link>
+            {/* 添加一个按钮使用程序化导航 */}
+            <button onClick={() => navigateToPage(page.path)}>
+              Go to {page.name}
+            </button>
           </li>
         ))}
       </ul>
@@ -61,4 +46,4 @@ const PropertiesComponent = () => {
   );
 };
 
-export default PropertiesComponent;
+export default MenuPage;
