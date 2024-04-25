@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import LinearProgressWithLabel from '@mui/material/LinearProgress';
+import LinearProgressWithLabel from '@/components/LinearProgress';
 
 const Loading = () => {
     return (

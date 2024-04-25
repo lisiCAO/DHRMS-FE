@@ -1,3 +1,4 @@
+'use client'
 import { Box, Typography, Button, Card, CardMedia, CardContent, Grid } from '@mui/material';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';

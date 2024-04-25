@@ -88,7 +88,7 @@ const StepForm = ({ propertyId }) => {
     return (
       <div {...getRootProps()} className="dropzone bg-gray-100 p-4 rounded-lg border-dashed border-2 border-gray-300 text-center cursor-pointer">
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag &quot;n&quot; drop some files here, or click to select files</p>
       </div>
     );
   };
