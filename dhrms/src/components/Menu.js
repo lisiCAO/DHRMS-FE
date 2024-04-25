@@ -46,14 +46,14 @@ const Menu = ({ checked }) => {
             justifyContent: "center", // Center vertically
             alignItems: "center", // Center horizontally
             "& > *": {
-              m: 5, // Margin for each button
+             
               width: "150px", // Cover the whole width
             },
           }}>
-          <Button variant='contained' onClick={() => {}}>
+          <Button variant='contained' onClick={() => {}} sx={{ m: 3 }}>
             Login
           </Button>
-          <Button variant='contained' onClick={() => {}}>
+          <Button variant='contained' onClick={() => {}} sx={{ m: 3 }}>
             Register
           </Button>
 
