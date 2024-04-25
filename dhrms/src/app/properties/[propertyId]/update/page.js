@@ -1,5 +1,7 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useDropzone } from 'react-dropzone';
 import { updatePropertyDetails } from '@/services/propertyService'; 
 import { uploadFile } from '@/services/fileService';
@@ -8,15 +10,9 @@ import Image from 'next/image';
 
 const StepForm = ({ propertyId }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
   const [imageFiles, setImageFiles] = useState([]);
   const [message, setMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const handleInputChange = (event, name) => {
-    const { type, checked, value } = event.target;
-    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
-  };
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -31,46 +27,48 @@ const StepForm = ({ propertyId }) => {
 
   useEffect(() => {
     return () => {
-      imageFiles.forEach(file => {
-        if (file.preview) {
-          URL.revokeObjectURL(file.preview);
-        }
-      });
+      imageFiles.forEach(file => URL.revokeObjectURL(file.preview));
     };
   }, [imageFiles]);
 
-  const validateCurrentStep = () => {
-    return steps[currentStep].every(fieldName => {
-      const field = propertyFormConfig.find(f => f.name === fieldName);
-      if (field.required) {
-        return !!formData[fieldName];
-      }
-      return true;
-    });
-  };
-
-  const canGoNext = validateCurrentStep();
-
-  const handleNext = async () => {
-    if (!canGoNext) {
-      setMessage('Please fill in all required fields.');
-      setOpenSnackbar(true);
-      return;
-    }
-
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
+  const formik = useFormik({
+    initialValues: {
+      address: '',
+      postcode: '',
+      propertyType: '',
+      propertyDescription: '',
+      status: '',
+      parking: false,
+      kitchen: false,
+      pool: false,
+      bedrooms: '',
+      bathrooms: '',
+      livingArea: '',
+      // Add other initial values here
+    },
+    validationSchema: Yup.object({
+      address: Yup.string().required('Address is required'),
+      postcode: Yup.string().required('Postcode is required'),
+      propertyType: Yup.string().required('Property type is required'),
+      propertyDescription: Yup.string().required('Property description is required'),
+      status: Yup.string().required('Status is required'),
+      bedrooms: Yup.number().positive('Bedrooms must be a positive number').required('Number of bedrooms is required'),
+      bathrooms: Yup.number().positive('Bathrooms must be a positive number').required('Number of bathrooms is required'),
+      livingArea: Yup.number().positive('Living area must be a positive number').required('Living area is required'),
+      // Add other validations here
+    }),
+    onSubmit: async (values) => {
       try {
-        await updatePropertyDetails(propertyId, formData);
+        await updatePropertyDetails(propertyId, values);
         await uploadImages();
         setMessage("Property updated and images uploaded successfully!");
+        setOpenSnackbar(true);
       } catch (error) {
         setMessage("Failed to update property and upload images: " + error.message);
+        setOpenSnackbar(true);
       }
-      setOpenSnackbar(true);
-    }
-  };
+    },
+  });
 
   const uploadImages = async () => {
     const uploads = imageFiles.map(file =>
@@ -78,12 +76,6 @@ const StepForm = ({ propertyId }) => {
     );
     await Promise.all(uploads);
   };
-
-  const handlePrevious = () => {
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
-  };
-
-  const handleSnackbarClose = () => setOpenSnackbar(false);
 
   const renderDropzoneField = () => {
     return (
@@ -104,8 +96,9 @@ const StepForm = ({ propertyId }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={formData[fieldName] || false}
-                  onChange={e => handleInputChange(e, fieldName)}
+                  checked={formik.values[fieldName] || false}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   name={fieldName}
                   color="primary"
                 />
@@ -121,9 +114,12 @@ const StepForm = ({ propertyId }) => {
           <FormControl key={field.name} fullWidth className="mt-4">
             <InputLabel>{field.label}</InputLabel>
             <Select
-              value={formData[fieldName] || ''}
-              onChange={e => handleInputChange(e, fieldName)}
+              value={formik.values[fieldName] || ''}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               label={field.label}
+              error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
+              helperText={formik.touched[fieldName] && formik.errors[fieldName]}
             >
               {field.options.map(option => (
                 <MenuItem key={option} value={option}>
@@ -161,8 +157,11 @@ const StepForm = ({ propertyId }) => {
           required={field.required}
           multiline={field.type === 'textarea'}
           rows={field.type === 'textarea' ? 3 : 1}
-          value={formData[fieldName] || ''}
-          onChange={e => handleInputChange(e, fieldName)}
+          value={formik.values[fieldName]}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
+          helperText={formik.touched[fieldName] && formik.errors[fieldName]}
           className="bg-white shadow-sm border-gray-300"
         />
       );
@@ -173,19 +172,19 @@ const StepForm = ({ propertyId }) => {
     <Container component="main" maxWidth="md" className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <Typography component="h1" variant="h5" className="text-xl font-bold mb-4">Update Property</Typography>
       <LinearProgress variant="determinate" value={((currentStep + 1) / steps.length) * 100} className="mb-4" />
-      <form onSubmit={e => e.preventDefault()} className="space-y-4">
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
         {renderFormFields()}
         <div className="flex justify-between mt-4">
-          <Button onClick={handlePrevious} disabled={currentStep === 0} className="bg-gray-300 hover:bg-gray-400 disabled:opacity-50 text-black font-bold py-2 px-4 rounded">
+          <Button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 0} className="bg-gray-300 hover:bg-gray-400 disabled:opacity-50 text-black font-bold py-2 px-4 rounded">
             Previous
           </Button>
-          <Button onClick={handleNext} disabled={!canGoNext} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          <Button type="submit" disabled={!formik.isValid || formik.isSubmitting} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             {currentStep === steps.length - 1 ? "Submit All" : "Next"}
           </Button>
         </div>
       </form>
-      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity="info" sx={{ width: '100%' }}>
           {message}
         </Alert>
       </Snackbar>
