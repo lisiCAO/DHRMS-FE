@@ -132,16 +132,16 @@ const LeaseDetails = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleApprove}>
+          <Button variant="contained" color="primary" onClick={handleApprove} style={{ marginRight: "10px" }}>
             Sign
           </Button>
-          <Button variant="contained" color="secondary" onClick={handleDeny}>
+          <Button variant="contained" color="primary" onClick={handleDeny} style={{ marginRight: "10px" }}>
             Deny
           </Button>
-          <Button variant="outlined">
+          <Button variant="contained" style={{ marginRight: "10px" }}>
             Cancel
           </Button>
-          <Button onClick={handlePrint} fullWidth margin="normal">Print</Button>
+          <Button  variant="contained" onClick={handlePrint} >Print</Button>
         </Grid>
       </Grid>
     </Container>

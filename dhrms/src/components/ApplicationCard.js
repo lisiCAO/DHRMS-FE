@@ -19,7 +19,7 @@ const ApplicationCard = ({ application }) => {
             <Button variant="contained" color="primary" style={{marginRight: '10px' }} onClick={onApprove}>
               Approve
             </Button>
-            <Button variant="contained" color="secondary" style={{ marginRight: '10px' }} onClick={onDeny}>
+            <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={onDeny}>
               Deny
             </Button>
             <Button variant="outlined">

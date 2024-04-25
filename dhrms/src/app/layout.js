@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
               <NavBar />
               <Container component="main" sx={{ flexGrow: 1, mt: 8, mb: 2, pt: 5 }}>
                 {children}
-]
+
               </Container>
               <Footer />
               </Box>

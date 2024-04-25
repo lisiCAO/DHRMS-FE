@@ -24,11 +24,25 @@ const LeaseTable = ({ leases }) => {
           { field: 'status', headerName: 'Status', width: 130 },
           {
             field: 'viewDetail',
-            headerName: 'View Detail',
+            headerName: '',
             width: 150,
             renderCell: (params) => (
               <Button variant="contained" color="primary" onClick={() => handleViewDetail(params.row.id)}>
                 View Detail
+              </Button>
+            ),
+          },
+          {
+            field: 'payment',
+            headerName: '',
+            width: 150,
+            renderCell: (params) => (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handlePayment(params.row.id)}
+              >
+                Pay
               </Button>
             ),
           },
