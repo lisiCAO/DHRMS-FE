@@ -23,6 +23,7 @@
     "axios-mock-adapter": "^1.22.0",
     "dayjs": "^1.11.10",
     "formik": "^2.4.5",
+    "keycloak-js": "^24.0.3",
     "lodash": "^4.17.21",
     "next": "14.2.2",
     "react": "^18",

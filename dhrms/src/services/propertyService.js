@@ -26,14 +26,13 @@ export const getPropertyDetails = async (propertyId, includeToken = true) => {
  * @param {boolean} includeToken - Specifies whether to include the Authorization token in the request.
  * @returns {Promise<Object[]>} - A promise that resolves to an array of properties.
  */
-export const fetchProperties = async (includeToken = true, associatedEntityId, associatedEntityType) => {
+export const fetchProperties = async (includeToken = true) => {
   const config = {};
   if (!includeToken) {
     config.headers = { 'Authorization': '' };
   }
   try {
-    const response = await apiClient.get('/files', {
-      params: { associatedEntityId, associatedEntityType },
+    const response = await apiClient.get('/properties', {
       headers: config.headers
     });
     return response.data;

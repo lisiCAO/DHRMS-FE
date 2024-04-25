@@ -34,7 +34,7 @@ const MapCard = ({ image, data, propertyId }) => {
       <CardContent>
         {Object.entries(data).map(([key, value]) => (
           <Typography variant="body2" color="text.secondary" key={key}>
-            {`${key}: ${value}`}  // Displays key-value pairs of property data
+            {`${key}: ${value}`}  
           </Typography>
         ))}
       </CardContent>
