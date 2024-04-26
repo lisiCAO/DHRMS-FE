@@ -3,7 +3,9 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+
 const MenuPage = () => {
+
   // 使用 useNavigation 钩子获取 navigation 对象
   const navigation = useRouter();
   const testRoute = '/test/';
@@ -16,7 +18,7 @@ const MenuPage = () => {
     { name: 'File', path: `${testRoute}file`},
     { name: 'Search', path: `${testRoute}search`},
     { name: 'Search with File', path: `${testRoute}search/file-address`},
-
+    { name: 'Up load File', path: `${testRoute}file/upload`},
     // 可以继续添加更多的测试页面
   ];
 

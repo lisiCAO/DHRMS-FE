@@ -11,6 +11,7 @@ const PropertiesComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter(); 
+
   useEffect(() => {
     loadProperties();
   }, []);

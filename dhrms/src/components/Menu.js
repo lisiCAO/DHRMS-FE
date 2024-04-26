@@ -1,9 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import Button from "@mui/material/Button";
+import KeycloakContext from '@/context/KeycloakContext';
+const keycloak = useContext(KeycloakContext);
 
-const Menu = ({ checked }) => {
+const Menu =  ({ checked }) => {
+
+ 
+  const handleLogin = () => {
+    keycloak.login();
+  };
+
+  const handleRegister = () => {
+    keycloak.register();
+  };
   return (
     <Grow
       in={checked}
@@ -32,9 +43,9 @@ const Menu = ({ checked }) => {
               m: 1.1, // Margin for each button
             },
           }}>
-          <Button onClick={() => {}}>Home</Button>
-          <Button onClick={() => {}}>About Us</Button>
-          <Button onClick={() => {}}>Get In Touch</Button>
+          <Button onClick={() => navigate('/')}>Home</Button>
+          <Button onClick={() => navigate('/about')}>About Us</Button>
+          <Button onClick={() => navigate('/contact')}>Get In Touch</Button>
         </Box>
 
         {/* Central box with buttons */}
@@ -50,10 +61,10 @@ const Menu = ({ checked }) => {
               width: "150px", // Cover the whole width
             },
           }}>
-          <Button variant='contained' onClick={() => {}} sx={{ m: 3 }}>
+          <Button variant="contained" onClick={handleLogin} sx={{ m: 3 }}>
             Login
           </Button>
-          <Button variant='contained' onClick={() => {}} sx={{ m: 3 }}>
+          <Button variant="contained" onClick={handleRegister} sx={{ m: 3 }}>
             Register
           </Button>
 
