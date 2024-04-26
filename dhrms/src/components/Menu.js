@@ -2,17 +2,17 @@ import React, {useContext} from "react";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import Button from "@mui/material/Button";
-import useKeycloak from "@/hooks/useKeycloak";
+// import useKeycloak from "@/hooks/useKeycloak";
 const Menu =  ({ checked }) => {
-  const keycloak = useKeycloak();
+  // const keycloak = useKeycloak();
  
-  const handleLogin = () => {
-    keycloak.login();
-  };
+  // const handleLogin = () => {
+  //   keycloak.login();
+  // };
 
-  const handleRegister = () => {
-    keycloak.register();
-  };
+  // const handleRegister = () => {
+  //   keycloak.register();
+  // };
   return (
     <Grow
       in={checked}
@@ -59,12 +59,12 @@ const Menu =  ({ checked }) => {
               width: "150px", // Cover the whole width
             },
           }}>
-          <Button variant="contained" onClick={handleLogin} sx={{ m: 3 }}>
+          {/* <Button variant="contained" onClick={handleLogin} sx={{ m: 3 }}>
             Login
           </Button>
           <Button variant="contained" onClick={handleRegister} sx={{ m: 3 }}>
             Register
-          </Button>
+          </Button> */}
 
           {/* // set different menu for different user roles
           <Button variant='contained' onClick={() => {}}>

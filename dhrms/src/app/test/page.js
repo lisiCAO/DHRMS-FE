@@ -19,6 +19,7 @@ const MenuPage = () => {
     { name: 'Search', path: `${testRoute}search`},
     { name: 'Search with File', path: `${testRoute}search/file-address`},
     { name: 'Up load File', path: `${testRoute}file/upload`},
+    { name: 'Lease ', path: `${testRoute}leases`},
     // 可以继续添加更多的测试页面
   ];
 
