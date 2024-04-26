@@ -47,6 +47,7 @@ const GoogleMapComponent = ({ properties }) => {
               Address: selectedPlace.property.address,
               ...selectedPlace.property.amenities
             }}
+            propertyId={selectedPlace.property.id}
           />
         </InfoWindow>
       )}

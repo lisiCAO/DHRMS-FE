@@ -33,8 +33,11 @@ useEffect(() => {
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box maxWidth={"md"}>
-        <Typography textAlign="center" my={2}>
-          MUI <code>{`<SearchBar/>`}</code> Tutorial
+      <Typography variant="h4" textAlign="center" my={2} style={{ fontFamily: 'Pacifico' }}>
+          Explore Properties with Ease
+        </Typography>
+        <Typography variant="subtitle1" textAlign="center" mb={2} style={{ fontFamily: 'Pacifico' }}>
+          Use our intuitive search tool to find and visualize properties that match your criteria.
         </Typography>
         <Box width="100%" px={2}>
           <Searchbar onSubmit={handleSearchSubmit} onResultSelect={handleSelectResult} />
@@ -45,20 +48,3 @@ useEffect(() => {
 };
 
 export default Home;
-
-const mockProperties = [
-    {
-        property: {
-            address: "1600 Amphitheatre Parkway, Mountain View, CA",
-            latitude: null,  // 地理位置数据将被填充
-            longitude: null
-        }
-    },
-    {
-        property: {
-            address: "1 Infinite Loop, Cupertino, CA",
-            latitude: null,
-            longitude: null
-        }
-    }
-];

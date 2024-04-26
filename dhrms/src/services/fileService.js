@@ -6,7 +6,11 @@ import apiClient from '@/utils/apiClient';
  * @param {string} associatedEntityType - The type of the associated entity (e.g., 'property', 'house').
  * @returns {Promise<Object[]>} - A promise that resolves to an array of file objects.
  */
-export const getFilesByEntity = async (associatedEntityId, associatedEntityType) => {
+export const getFilesByEntity = async (associatedEntityId, associatedEntityType, includeToken=true) => {
+  const config = {};
+  if (!includeToken) {
+    config.headers = { Authorization: '' }; // Ensures no Authorization header is sent
+  }
   try {
     const response = await apiClient.get('/files', {
       params: { associatedEntityId, associatedEntityType }

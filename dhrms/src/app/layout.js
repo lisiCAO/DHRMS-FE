@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
       <Head>
         <title>DHRMS</title>
         <meta name='description' content='TODO' />
+
       </Head>
       <body className={inter.className}>
 

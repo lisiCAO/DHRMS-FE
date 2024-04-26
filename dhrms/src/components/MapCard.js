@@ -14,7 +14,7 @@ const MapCard = ({ image, data, propertyId }) => {
   // Debounced function to handle navigation, preventing rapid accidental clicks
   // Executes at the beginning of the delay period
   const navigateToDetail = debounce(() => {
-    router.push(`/properties/${propertyId}/details`); // Navigate to the detail page of the property
+    router.push(`/properties/${propertyId}`); // Navigate to the detail page of the property
   }, 300, {
     'leading': true,
     'trailing': false
