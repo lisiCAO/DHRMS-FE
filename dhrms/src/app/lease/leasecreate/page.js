@@ -73,8 +73,8 @@ const LeaseCreate = () => {
               <Grid item xs={12}>
                 <Typography variant='body1'>
                   THIS AGREEMENT is made and entered into this 18th day of
-                  April, 2024, by and between ___________(hereinafter "Owner")
-                  and ___________(hereinafter "Renter").
+                  April, 2024, by and between ___________(hereinafter &quot;Owner&quot;)
+                  and ___________(hereinafter &quot;Renter&quot;).
                 </Typography>
                 <Typography variant='body1'>
                   1. **TERM:** This lease shall commence on
