@@ -7,19 +7,6 @@ import PropertiesTable from '@/components/PropertiesTable';
 import ApplicationCard from '@/components/ApplicationCard';
 
 
-
-const mockProperties = [
-    { id: 1, name: 'Property 1', address: '123 Main St', image: '/path/to/image1.jpg', status: 'Available' },
-    { id: 2, name: 'Property 2', address: '456 Maple Ave', image: '/path/to/image2.jpg', status: 'Occupied' },
-    // Add more properties as needed...
-  ];
-  
-  const mockApplications = [
-    { id: 1, name: 'Applicant 1', dob: '1990-01-01', age: 31, email: 'applicant1@example.com', phoneNumber: '123-456-7890', occupants: 2, leaseStart: '2022-01-01', leaseEnd: '2022-12-31', propertyId: 1 },
-    { id: 2, name: 'Applicant 2', dob: '1985-01-01', age: 36, email: 'applicant2@example.com', phoneNumber: '234-567-8901', occupants: 1, leaseStart: '2022-02-01', leaseEnd: '2023-01-31', propertyId: 2 },
-    // Add more applications as needed...
-  ];
-
   const ApplicationList = () => {
     const [applications, setApplications] = useState([]);
     const [properties, setProperties] = useState([]);

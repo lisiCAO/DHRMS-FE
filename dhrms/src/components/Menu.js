@@ -61,6 +61,9 @@ const Menu = ({ checked }) => {
           <Grid item xs={4}>
             <Button fullWidth variant="contained" onClick={() => navigate('/register')}>Register</Button>
           </Grid>
+          <Grid item xs={4}>
+            <Button fullWidth variant="contained" onClick={() => navigate('/lease/payment')}>payment</Button>
+          </Grid>
         </Grid>
       </Box>
     </Grow>
