@@ -7,15 +7,6 @@ import { useEffect } from "react";
 const Home = () => {
   const router = useRouter();
 
-  // Handles submitting the search term to fetch results and navigate to the map page with these results
-  // const handleSearchSubmit = (results) => {
-  //   console.log("/map", JSON.stringify(results)); 
-  //     router.push({
-  //       pathname: "/map",
-  //       query: { properties: JSON.stringify(results) } // Pass results to the map page as a query parameter
-  //     }).catch(e => console.error(e)); ;
-
-  // };
   const handleSearchSubmit = (results) => {
     localStorage.setItem('searchResults', JSON.stringify(results));
     router.push("/map");
@@ -34,14 +25,9 @@ useEffect(() => {
 
   // Handles selecting a specific search result to navigate to the map page with that particular result
   const handleSelectResult = (result) => {
-    router.push({
-      pathname: "/map",
-      query: { properties: JSON.stringify([result]) } // Pass the selected result to the map page
-    });
+    localStorage.setItem('searchResults', JSON.stringify([result]));
+    router.push("/map");
   };
-
- 
-
 
   // Render the Home component with a search bar and appropriate layout
   return (

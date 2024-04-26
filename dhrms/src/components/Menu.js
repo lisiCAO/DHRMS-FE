@@ -2,11 +2,9 @@ import React, {useContext} from "react";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import Button from "@mui/material/Button";
-import KeycloakContext from '@/context/KeycloakContext';
-const keycloak = useContext(KeycloakContext);
-
+import useKeycloak from "@/hooks/useKeycloak";
 const Menu =  ({ checked }) => {
-
+  const keycloak = useKeycloak();
  
   const handleLogin = () => {
     keycloak.login();
