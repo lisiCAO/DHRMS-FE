@@ -41,9 +41,11 @@ const PropertyDetailPage = ({ params }) => {
     // Add your logic for applying here
   };
 
+  
+
   return (
     <Box sx={{ padding: 4 }}>
-      <Typography variant="h2" gutterBottom>{propertyDetails.title}</Typography>
+      <Typography variant="h1" gutterBottom>Property Details</Typography>
       <Typography variant="subtitle1" gutterBottom>{propertyDetails.address}</Typography>
       <Typography variant="h3" color="primary" gutterBottom>${propertyDetails.price} / month</Typography>
 
@@ -87,35 +89,4 @@ const PropertyDetailPage = ({ params }) => {
 export default PropertyDetailPage;
 
 
-const processPropertyData = (propertyData, fileData) => {
-    const { amenities, ...restOfPropertyData } = propertyData;
-  
-    // Separate numeric amenities and boolean amenities
-    const numericAmenities = {
-      bedrooms: amenities.bedrooms || 0,
-      bathrooms: amenities.bathrooms || 0,
-      livingArea: amenities.livingArea || 0,
-    };
-  
-    const booleanAmenities = {
-      parking: amenities.parking || false,
-      kitchen: amenities.kitchen || false,
-      pool: amenities.pool || false,
-      // Add more amenities here as needed
-    };
-  
-    // Extract image URLs
-    const imageUrls = fileData.filter(file => file.fileType === 'Image').map(file => file.url);
-  
-    // Check availability from status
-    const isAvailable = propertyData.status === 'AVAILABLE';
-  
-    return {
-      ...restOfPropertyData,
-      isAvailable,
-      imageUrls,
-      numericAmenities,
-      booleanAmenities,
-    };
-  };
   

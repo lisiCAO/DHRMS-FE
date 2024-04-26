@@ -2,18 +2,41 @@ import React from 'react';
 import { Box, Button } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Image from 'next/image';
+import { deleteProperty, deleteMultipleProperties } from '@/services/propertyService';
+import { useRouter } from 'next/navigation';
+
+
 
 const PropertyComponent = ({ properties, onDelete, onBulkDelete, onSelectProperty, onViewDetail }) => {
-  const handleDelete = (propertyId) => {
-    onDelete(propertyId);
+
+  const router = useRouter();
+  const handleDelete = async (propertyId) => {
+    try {
+      await deleteProperty(propertyId, false);
+      loadProperties(); // Reload the list after deletion
+    } catch (error) {
+      console.error('Error deleting property:', error);
+    }
   };
 
-  const handleSelect = (propertyId) => {
-    onSelectProperty(propertyId);
+  const handleBulkDelete = async () => {
+    try {
+      await deleteMultipleProperties(selectedProperties, false);
+      loadProperties(); // Reload the list after deletion
+    } catch (error) {
+      console.error('Error deleting properties:', error);
+    }
+  };
+
+  const handleSelectProperty = (id) => {
+    setSelectedProperties(prev => 
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    );
   };
 
   const handleViewDetail = (propertyId) => {
-    onViewDetail(propertyId);
+    // 使用 router.push 来编程方式导航
+    router.push(`properties/${propertyId}`);
   };
 
   return (
@@ -54,7 +77,7 @@ const PropertyComponent = ({ properties, onDelete, onBulkDelete, onSelectPropert
             renderCell: (params) => (
               <input
                 type="checkbox"
-                onChange={() => handleSelect(params.row.id)}
+                onChange={() => handleSelectProperty(params.row.id)}
               />
             ),
           },
