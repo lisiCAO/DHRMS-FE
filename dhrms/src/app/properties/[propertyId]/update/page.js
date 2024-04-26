@@ -8,7 +8,7 @@ import { uploadFile } from '@/services/fileService';
 import { Container, Checkbox, FormControl, FormControlLabel, Typography, Button, TextField, Snackbar, Alert, InputLabel, Select, MenuItem, LinearProgress, Box, FormGroup, FormHelperText } from '@mui/material';
 import Image from 'next/image';
 
-const StepForm = ({ propertyId }) => {
+const UpdatePropertyPage = ({ propertyId }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [imageFiles, setImageFiles] = useState([]);
   const [message, setMessage] = useState("");
@@ -81,7 +81,7 @@ const StepForm = ({ propertyId }) => {
     return (
       <div {...getRootProps()} className="dropzone bg-gray-100 p-4 rounded-lg border-dashed border-2 border-gray-300 text-center cursor-pointer">
         <input {...getInputProps()} />
-        <p>Drag &quot;n&quot; drop some files here, or click to select files</p>
+        <p>Drag &quot;n&quot;  drop some files here, or click to select files</p>
       </div>
     );
   };
@@ -216,4 +216,4 @@ const steps = [
   ["image"]
 ];
 
-export default StepForm;
+export default UpdatePropertyPage;
