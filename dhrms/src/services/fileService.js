@@ -14,7 +14,7 @@ export const getFilesByEntity = async (associatedEntityId, associatedEntityType,
   try {
     const response = await apiClient.get('/files', {
       params: { associatedEntityId, associatedEntityType }
-    });
+    }, config);
     return response.data;
   } catch (error) {
     console.error('Failed to list files:', error);

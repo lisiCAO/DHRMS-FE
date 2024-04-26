@@ -3,7 +3,7 @@
 import { Box, Typography, Button, Card, CardMedia, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getPropertyDetails } from '@/services/propertyService';
-import { getFilesByEntity } from '@/services/fileService';
+import { getFilesByEntityWithoutAuth } from '@/services/fileService';
 import { useParams } from 'next/navigation';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import KitchenIcon from '@mui/icons-material/Kitchen';
@@ -22,7 +22,7 @@ const PropertyDetailPage = () => {
     const fetchData = async () => {
       try {
         const propertyData = await getPropertyDetails(propertyId, false);
-        const fileData = await getFilesByEntity(propertyId, 'Property');
+        const fileData = await getFilesByEntityWithoutAuth(propertyId, 'property');
         setProperty(propertyData);
         setImages(fileData.map(file => file.publicUrl));
       } catch (error) {
@@ -79,24 +79,4 @@ const PropertyDetailPage = () => {
 };
 
 export default PropertyDetailPage;
-const mockPropertyDetails = {
-  id: '12345',
-  address: '123 Main St, Anytown, AT 12345',
-  propertyType: 'House',
-  status: 'Available',
-  propertyDescription: 'Beautiful family home located in the heart of the city with easy access to all amenities.',
-  amenities: {
-      parking: true,
-      kitchen: true,
-      pool: true,
-      bedrooms: 4,
-      bathrooms: 2,
-      livingArea: 200
-  }
-};
 
-const mockImages = [
-  '/images/property1.jpg',
-  '/images/property2.jpg',
-  '/images/property3.jpg'
-];
